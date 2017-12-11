@@ -23,18 +23,24 @@ $(function() {
             expect(allFeeds.length).not.toBe(0);
         });
 
-        /*Test that ensures that every feed in allFeeds has an URL and a name is defined
-        /* and is not empty.
+        /* Test that ensures that every feed in allFeeds has a defined and not empty name.
           */
-        it('name and url defined', function() {
-            for (let i = 0; i < allFeeds.length; i++) {
-                expect(allFeeds[i].url).toBeDefined();
-                expect(allFeeds[i].url).not.toBe(0);
-
-                expect(allFeeds[i].name).toBeDefined();
-                expect(allFeeds[i].name).not.toBe(0);
-            }
+        it('name is defined', function() {
+            allFeeds.forEach(feed => (
+                expect(feed.name).toBeDefined(),
+                expect(feed.name).not.toBe(0)
+            ));
         });
+        
+        /* Test that ensures that every feed in allFeeds has a defined and not empty URL.
+          */
+        it('url is defined', function() {
+            allFeeds.forEach(feed => (
+                expect(feed.url).toBeDefined(),
+                expect(feed.url).not.toBe(0)
+            ));
+        });
+
     });
 
     describe('The menu', function() {
@@ -63,10 +69,6 @@ $(function() {
          * a single .entry element within the .feed container.
          * */
         let container = $('.feed');
-        let allFeeds = [{
-            name: 'Udacity Blog',
-            url: 'http://blog.udacity.com/feed'
-        }];
 
         beforeEach(function(done) {
             loadFeed(0, function() {
@@ -75,27 +77,28 @@ $(function() {
         });
 
         it('contain at least a single .entry element within .feed container', function(done) {
-            expect(container.children().length > 0).toBe(true);
+            expect($('.feed .entry').length > 0).toBe(true);
             done();
         });
     });
 
     describe('New Feed Selection', function() {
+        let post1, post2;
         /* Test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          */
         beforeEach(function(done) {
             loadFeed(0, function() {
-                post1 = $('.entry').eq(0).html();
+                post1 = $('.entry').first().html();
                 loadFeed(1, function() {
-                    post2 = $('.entry').eq(0).html();
+                    post2 = $('.entry').first().html();
                     done();
                 });
             });
         });
 
         it('content changes after a new feed is loaded', function() {
-            expect(post1).not.toMatch(post2);
+            expect(post1).not.toBe(post2);
         });
     });
 }());
